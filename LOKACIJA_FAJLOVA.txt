@@ -1,0 +1,76 @@
+📍 LOKACIJA FAJLOVA - Kompletna mapa
+
+═══════════════════════════════════════════════════════════════════════════
+
+GLAVNA MAPA:
+c:\Users\RODITELJI\Desktop\py avanture\py avanture\
+
+SVE FAJLOVE TREBAJ DA BUDU U OVOJ MAPI!
+
+═══════════════════════════════════════════════════════════════════════════
+
+📋 DATOTEKE - REDOSLIJED KAKO DA IH NAĐEŠ:
+
+🌐 WEB FAJLOVI (Trebaj biti zajedno):
+├─ index.html           (Glavna web stranica)
+├─ styl.css             (CSS stilovi - boje i layout)
+├─ scripts.js           (JavaScript - logika)
+├─ scripts_api.js       (JavaScript sa API - alternativa)
+└─ sssk.jpg             (Slika - pozadina)
+
+🐍 PYTHON FAJLOVI (Trebaj biti zajedno):
+├─ app.py               ⭐ GLAVNI - Pokreni ovaj!
+├─ parking_system.py    (Upravljanje parkiranjem)
+├─ arduino_sensors.py   (Upravljanje senzorima)
+├─ test_system.py       (Testiranje)
+└─ requirements.txt     (Zavisnosti - pip install -r requirements.txt)
+
+🤖 ARDUINO FAJL:
+└─ arduino_sketch.ino   (Arduino kod - učitaj u Arduino IDE)
+
+📚 DOKUMENTACIJA (Pročitaj redom):
+├─ BRZI_POCETAK.md      ← POČNI OVDJE! (5 minuta)
+├─ REDOSLIJED_FAJLOVA.md (Redoslijed fajlova)
+├─ ARDUINO_VODIC.md     (Detaljni Arduino vodič)
+├─ VIZUELNI_VODIC.md    (Slike i dijagrami)
+├─ VODIC_SVIH_DATOTEKA.md (Što radi svaki fajl)
+├─ STRUKTURA.txt        (Vizuelna struktura)
+└─ README.md            (Kompletna dokumentacija)
+
+💾 AUTOMATSKI GENERIRANI (čim pokrenm server):
+├─ sensor_data.json     (Status senzora)
+├─ parking_data.json    (Rezervacije)
+├─ uploads/             (Mapa za fajlove)
+└─ qr_*.png             (QR kodovi)
+
+═══════════════════════════════════════════════════════════════════════════
+
+KAKO VIDJETI GDJE SU FAJLOVI:
+
+Otvori Terminal (PowerShell) i upiši:
+
+cd "c:\Users\RODITELJI\Desktop\py avanture\py avanture"
+dir
+
+Trebalo bi vidjeti sve gore navedene fajlove.
+
+═══════════════════════════════════════════════════════════════════════════
+
+KAKO POKRENUTI:
+
+1. Otvori Terminal
+2. cd "c:\Users\RODITELJI\Desktop\py avanture\py avanture"
+3. pip install -r requirements.txt
+4. python app.py
+5. Otvori preglednik: http://localhost:5000
+
+═══════════════════════════════════════════════════════════════════════════
+
+NAPOMENE:
+
+✓ Svi Python fajlovi trebaj biti u ISTOJ mapi
+✓ Web fajlovi (HTML, CSS, JS, JPG) trebaj biti u ISTOJ mapi
+✓ Arduino fajl je .ino fajl - učitaj ga u Arduino IDE
+✓ Dokumentacija fajlovi su .md fajlovi - pročitaj ih u bilo kom editoru
+
+═══════════════════════════════════════════════════════════════════════════
