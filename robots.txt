@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: http://localhost:5000/sitemap.xml
-
-# Disallow any sensitive paths if you add them later
-# Disallow: /admin
