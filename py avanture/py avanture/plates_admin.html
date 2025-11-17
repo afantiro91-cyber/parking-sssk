@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Uredi tablice – Parkingsssk</title>
+  <link rel="stylesheet" href="styl.css">
+  <style>
+    .admin-card{background:rgba(0,0,0,0.7);padding:20px;border-radius:12px;width:360px;margin:30px auto;color:#ffcc00}
+    input[type=text]{width:70%;padding:8px;border-radius:8px;border:none}
+    select,button{padding:8px 12px;border-radius:8px;border:none}
+    .row{display:flex;gap:8px;align-items:center;justify-content:center;margin:10px 0}
+    .plates-list{max-width:700px;margin:10px auto;color:#fff;text-align:left}
+    .plates-list li{background:rgba(0,0,0,0.6);padding:8px;border-radius:8px;margin:6px 0}
+  </style>
+</head>
+<body>
+  <h1 class="main-title">📋 Uredi tablice</h1>
+  <div class="admin-card">
+    <div class="row">
+      <input id="plateInput" type="text" placeholder="Unesite tablicu npr. ABC-123" aria-label="Unesite tablicu">
+      <select id="spotSelect">
+        <!-- options populated by JS -->
+      </select>
+    </div>
+    <div class="row">
+      <button id="addBtn">Dodaj / Ažuriraj</button>
+      <button id="removeBtn">Ukloni</button>
+      <button id="refreshBtn">Osvježi</button>
+    </div>
+    <div class="row">
+      <button id="initBtn">Inicijaliziraj 15 (popuni)</button>
+      <button id="downloadBtn">Preuzmi JSON</button>
+    </div>
+  </div>
+
+  <section class="plates-list">
+    <h2 style="color:#ffcc00;text-align:center">Trenutne tablice</h2>
+    <ul id="platesList"></ul>
+  </section>
+
+  <script src="plates_admin.js"></script>
+</body>
+</html>
