@@ -1,0 +1,126 @@
+<script>
+
+    // 🔥 TABLICA → PROFESOR
+    const tabliceProfesori = {
+      "ABC-123": "Sabahudin solak",
+      "A12-K-456": "Profesorica Mehić",
+      "T99-M-222": "Profesor Zukić",
+      "SG-123-AB": "Profesorica Džafić",
+      "K45-O-999": "Profesor Imamović"
+    };
+
+    function provjeriUparivanje(tablica, ime) {
+      if (!tabliceProfesori[tablica]) {
+        return { ok: false, msg: "❌ Tablica nije registrovana!" };
+      }
+      if (tabliceProfesori[tablica] !== ime) {
+        return { ok: false, msg: "❌ Ime ne odgovara tablici ovog profesora!" };
+      }
+      return { ok: true, msg: "✔ Dozvoljeno — podaci se poklapaju." };
+    }
+
+    // --- TVOJE VARIJABLE ---
+    const slobodnaSpan = document.getElementById("slobodna");
+    const progressBar = document.getElementById("progressBar");
+    const qrKodDiv = document.getElementById("qrKod");
+    const statusDiv = document.getElementById("status");
+    const mjestoSelect = document.getElementById("mjestoSelect");
+    const prikaziBtn = document.getElementById("prikaziZauzeta");
+    const mjestaZauzetaDiv = document.getElementById("mjestaZauzeta");
+
+    let slobodnaMjesta = 15;
+    let zauzetaMjesta = [];
+
+    function popuniMjesta() {
+      mjestoSelect.innerHTML = "";
+      for (let i = 1; i <= 15; i++) {
+        if (!zauzetaMjesta.some(m => m.mjesto === i)) {
+          const option = document.createElement("option");
+          option.value = i;
+          option.textContent = i;
+          mjestoSelect.appendChild(option);
+        }
+      }
+    }
+    popuniMjesta();
+    slobodnaSpan.textContent = slobodnaMjesta;
+
+    // 🔥 Profesor može zauzeti parking samo jednom
+    function profesorVecZauzeo(tablica) {
+      return zauzetaMjesta.some(m => m.tablica === tablica);
+    }
+
+    // --- SUBMIT ---
+    document.getElementById("uploadForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const ime = document.getElementById("korisnikIme").value.trim();
+      const tablica = document.getElementById("plate").value.trim().toUpperCase();
+      const vrijemeOd = document.getElementById("vrijemeOd").value;
+      const vrijemeDo = document.getElementById("vrijemeDo").value;
+      const odabranoMjesto = parseInt(mjestoSelect.value);
+
+      // 🔥 Provjera tablice + ime
+      const provjera = provjeriUparivanje(tablica, ime);
+      if (!provjera.ok) {
+        statusDiv.innerHTML = `<span style="color:red; font-weight:bold;">${provjera.msg}</span>`;
+        return;
+      }
+
+      // 🔥 NOVO: profesor smije samo jednom rezervisati
+      if (profesorVecZauzeo(tablica)) {
+        statusDiv.innerHTML = `<span style="color:red; font-weight:bold;">
+        ❌ Ovaj profesor je već jednom rezervisao parking!
+        </span>`;
+        return;
+      }
+
+      // Sve ostalo ostaje isto
+      zauzetaMjesta.push({
+        mjesto: odabranoMjesto,
+        ime: ime,
+        tablica: tablica,
+        vrijemeOd: vrijemeOd,
+        vrijemeDo: vrijemeDo
+      });
+
+      slobodnaMjesta--;
+      slobodnaSpan.textContent = slobodnaMjesta;
+      progressBar.value = 15 - slobodnaMjesta;
+
+      statusDiv.innerHTML = `
+        <span style="color:lightgreen; font-weight:bold;">✔ ${ime} rezervisao mjesto ${odabranoMjesto}.</span>
+        <br>Vrijeme: ${vrijemeOd} - ${vrijemeDo}
+      `;
+
+      // QR kod
+      qrKodDiv.innerHTML = "";
+      const canvas = document.createElement("canvas");
+      const qr = new QRious({ element: canvas, size: 200, value: `OPEN_GATE|${tablica}` });
+      const label = document.createElement('div');
+      label.style.color = '#ffcc00';
+      label.style.marginBottom = '6px';
+      label.textContent = 'Skenirajte QR kod za otvaranje rampe';
+      qrKodDiv.appendChild(label);
+      qrKodDiv.appendChild(qr.element);
+
+      popuniMjesta();
+    });
+
+    // Prikaz zauzetih
+    prikaziBtn.addEventListener("click", function() {
+      if (zauzetaMjesta.length === 0) {
+        mjestaZauzetaDiv.style.display = "block";
+        mjestaZauzetaDiv.innerHTML = "<span>Nema zauzetih mjesta.</span>";
+        return;
+      }
+      mjestaZauzetaDiv.style.display = "block";
+      let html = "<ul>";
+      zauzetaMjesta.forEach(m => {
+        html += `<li>Mjesto ${m.mjesto} - ${m.ime} (${m.tablica}) | ${m.vrijemeOd} - ${m.vrijemeDo}</li>`;
+      });
+      html += "</ul>";
+      mjestaZauzetaDiv.innerHTML = html;
+    });
+
+</script>
