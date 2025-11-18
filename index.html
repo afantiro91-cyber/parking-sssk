@@ -1,64 +1,168 @@
-<!-- Ostatak tvoje <head> ostaje isti -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🚗 Professor Parking System</title>
 
-<body>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
-<h1>🚗 Parking – Professor Parking</h1>
-<h2 style="color: #047730;">
-  Free spots: <span id="slobodna">15</span>
-</h2>
- 
-<progress id="progressBar" max="15" value="0"></progress>
-<div class="card">
-  <form id="uploadForm">
-    <label for="korisnikIme">Your name:</label>
-    <input type="text" id="korisnikIme" placeholder="Enter your name" required>
-
-    <label for="plate">Enter license plate (e.g., ABC-123):</label>
-    <input type="text" id="plate" placeholder="ABC-123" required>
-
-    <label for="vrijemeOd">Time from:</label>
-    <input type="time" id="vrijemeOd" required>
-
-    <label for="vrijemeDo">Time to:</label>
-    <input type="time" id="vrijemeDo" required>
-
-    <label for="mjestoSelect">Choose spot (1–15):</label>
-    <select id="mjestoSelect" required size="5" style="height:100px; overflow-y: scroll;"></select>
-
-    <button type="submit" id="rezervisiBtn">Reserve spot</button>
-    <button type="reset" id="resetBtn">Clear</button>
-  </form>
-</div>
-
-<div id="status"></div>
-<div id="qrKod"></div>
-
-<div class="card">
-  <button id="prikaziZauzeta">Show taken spots</button>
-  <div id="mjestaZauzeta"></div>
-</div>
-
+<!-- QRious library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js"></script>
 
-<script>
-  const firebaseConfig = {
-    apiKey: "TVOJ_API_KEY",
-    authDomain: "TVOJ_PROJECT.firebaseapp.com",
-    databaseURL: "https://TVOJ_PROJECT.firebaseio.com",
-    projectId: "TVOJ_PROJECT",
-    storageBucket: "TVOJ_PROJECT.appspot.com",
-    messagingSenderId: "TVOJ_SENDER_ID",
-    appId: "TVOJ_APP_ID"
-  };
-  const app = firebase.initializeApp(firebaseConfig);
-  const database = firebase.database();
-</script>
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    h1 {
+        color: #2b8a3e;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    h2 {
+        color: #047730;
+        margin-bottom: 20px;
+    }
+
+    .card {
+        background: #fff;
+        padding: 20px;
+        margin: 15px 0;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        max-width: 500px;
+        width: 100%;
+    }
+
+    label {
+        display: block;
+        margin: 10px 0 5px;
+        font-weight: 500;
+    }
+
+    input, select, button {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 12px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+    }
+
+    button {
+        cursor: pointer;
+        background-color: #2b8a3e;
+        color: white;
+        font-weight: 600;
+        border: none;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background-color: #216b2c;
+    }
+
+    #progressBar {
+        width: 100%;
+        height: 25px;
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 15px;
+        appearance: none;
+    }
+
+    #progressBar::-webkit-progress-bar {
+        background-color: #e0e0e0;
+    }
+
+    #progressBar::-webkit-progress-value {
+        background-color: #2b8a3e;
+    }
+
+    #status {
+        margin: 10px 0;
+        font-weight: bold;
+    }
+
+    #qrKod {
+        text-align: center;
+        margin: 15px 0;
+    }
+
+    #qrKod div {
+        font-weight: 500;
+        margin-bottom: 10px;
+    }
+
+    #mjestaZauzeta {
+        margin-top: 10px;
+    }
+
+    ul {
+        padding-left: 20px;
+    }
+
+    @media (max-width: 550px) {
+        .card {
+            padding: 15px;
+        }
+        input, select, button {
+            font-size: 0.9rem;
+        }
+    }
+</style>
+</head>
+<body>
+
+<h1>🚗 Professor Parking System</h1>
+<h2>Free spots: <span id="slobodna">15</span></h2>
+<progress id="progressBar" max="15" value="0"></progress>
+
+<div class="card">
+    <form id="uploadForm">
+        <label for="korisnikIme">Your Name:</label>
+        <input type="text" id="korisnikIme" placeholder="Enter your name" required>
+
+        <label for="plate">License Plate:</label>
+        <input type="text" id="plate" placeholder="ABC-123" required>
+
+        <label for="vrijemeOd">Time From:</label>
+        <input type="time" id="vrijemeOd" required>
+
+        <label for="vrijemeDo">Time To:</label>
+        <input type="time" id="vrijemeDo" required>
+
+        <label for="mjestoSelect">Choose Spot (1–15):</label>
+        <select id="mjestoSelect" required size="5" style="height:120px; overflow-y: auto;"></select>
+
+        <button type="submit" id="rezervisiBtn">Reserve Spot</button>
+        <button type="reset" id="resetBtn">Clear</button>
+    </form>
+</div>
+
+<div id="status"></div>
+<div id="qrKod"></div>
+
+<div class="card">
+    <button id="prikaziZauzeta">Show Taken Spots</button>
+    <div id="mjestaZauzeta"></div>
+</div>
 
 <script>
+  // --- Sample plate to professor mapping ---
   const plateToProfessor = {
     "ABC-123": "Sabahudin Solak",
     "A12-K-456": "Professor Mehic",
@@ -84,16 +188,6 @@
   let freePlaces = 15;
   let takenPlaces = [];
 
-  // --- Firebase real-time update ---
-  database.ref('parking').on('value', snapshot => {
-    const data = snapshot.val() || {};
-    takenPlaces = Object.values(data);
-    freePlaces = 15 - takenPlaces.length;
-    freeSpan.textContent = freePlaces;
-    progressBar.value = 15 - freePlaces;
-    fillPlaces();
-  });
-
   function fillPlaces() {
     placeSelect.innerHTML = "";
     for (let i = 1; i <= 15; i++) {
@@ -111,14 +205,16 @@
   }
 
   function saveReservation(reservation) {
-    // spremi u Firebase pod jedinstvenim ID-om
-    const newRef = database.ref('parking').push();
-    newRef.set(reservation);
+    // Local storage / Firebase simulation
+    takenPlaces.push(reservation);
+    freePlaces = 15 - takenPlaces.length;
+    freeSpan.textContent = freePlaces;
+    progressBar.value = 15 - freePlaces;
+    fillPlaces();
   }
 
   document.getElementById("uploadForm").addEventListener("submit", function(e) {
     e.preventDefault();
-
     const name = document.getElementById("korisnikIme").value.trim();
     const plate = document.getElementById("plate").value.trim().toUpperCase();
     const timeFrom = document.getElementById("vrijemeOd").value;
@@ -127,43 +223,36 @@
 
     const check = verifyPairing(plate, name);
     if (!check.ok) {
-      statusDiv.innerHTML = `<span style="color:red; font-weight:bold;">${check.msg}</span>`;
+      statusDiv.innerHTML = `<span style="color:red;font-weight:bold;">${check.msg}</span>`;
       return;
     }
 
     if (professorAlreadyReserved(plate)) {
-      statusDiv.innerHTML = `<span style="color:red; font-weight:bold;">❌ This professor already reserved a parking spot!</span>`;
+      statusDiv.innerHTML = `<span style="color:red;font-weight:bold;">❌ Professor already reserved a spot!</span>`;
       return;
     }
 
     const reservation = { place: selectedPlace, name, plate, timeFrom, timeTo };
     saveReservation(reservation);
 
-    statusDiv.innerHTML = `
-      <span style="color:lightgreen; font-weight:bold;">✔ ${name} reserved spot ${selectedPlace}.</span>
-      <br>Time: ${timeFrom} - ${timeTo}
-    `;
+    statusDiv.innerHTML = `<span style="color:green;font-weight:bold;">✔ ${name} reserved spot ${selectedPlace}. (${timeFrom} - ${timeTo})</span>`;
 
     qrDiv.innerHTML = "";
     const canvas = document.createElement("canvas");
     const qr = new QRious({ element: canvas, size: 200, value: `OPEN_GATE|${plate}` });
     const label = document.createElement("div");
-    label.style.color = "#ffcc00";
+    label.style.color = "#2b8a3e";
     label.style.marginBottom = "6px";
-    label.textContent = "Scan this QR code to open the gate";
+    label.textContent = "Scan QR to open gate";
     qrDiv.appendChild(label);
     qrDiv.appendChild(qr.element);
-
-    fillPlaces();
   });
 
   showTakenBtn.addEventListener("click", function() {
     if (takenPlaces.length === 0) {
-      takenPlacesDiv.style.display = "block";
-      takenPlacesDiv.innerHTML = "<span>No taken parking spots.</span>";
+      takenPlacesDiv.innerHTML = "<span>No taken spots.</span>";
       return;
     }
-    takenPlacesDiv.style.display = "block";
     let html = "<ul>";
     takenPlaces.forEach(p => {
       html += `<li>Spot ${p.place} - ${p.name} (${p.plate}) | ${p.timeFrom} - ${p.timeTo}</li>`;
@@ -171,7 +260,9 @@
     html += "</ul>";
     takenPlacesDiv.innerHTML = html;
   });
-</script>
 
+  // Init
+  fillPlaces();
+</script>
 </body>
 </html>
