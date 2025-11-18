@@ -1,3 +1,16 @@
+database.ref('parking/').on('value', (snapshot) => {
+  const data = snapshot.val();
+  for (let mjesto in data) {
+    const el = document.getElementById('mjesto-' + mjesto);
+    if (data[mjesto].zauzeto) {
+      el.innerText = 'Rezervisano';
+      el.disabled = true; // onemogući klik
+    } else {
+      el.innerText = 'Slobodno';
+      el.disabled = false;
+    }
+  }
+});
 const TOTAL_SPOTS = 15;
 let slobodnaMjesta = TOTAL_SPOTS;
 let invalidMjesta = 1;
@@ -73,3 +86,4 @@ downloadBtn.addEventListener('click', function(){
   if(!currentQRCanvas) return;
   const link=document.createElement('a'); link.href=currentQRCanvas.toDataURL('image/png'); link.download=`qr-kod-${new Date().getTime()}.png`; link.click();
 });
+
